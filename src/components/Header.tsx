@@ -1,34 +1,171 @@
-import Link from 'next/link';
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion, useAnimation } from "framer-motion";
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/organizations', label: 'Organizations' },
-  { href: '/individuals', 'label': 'Individuals' },
-  { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/rewire-programs', label: 'Upcoming Rewire Programs' },
-  { href: '/book-now', label: 'Book Now' },
-  { href: '/privacy-policy', label: 'Privacy Policy' },
+  { href: "/#home", label: "Home" },
+  { href: "/#organizations", label: "Organizations" },
+  { href: "/#individuals", label: "Individuals" },
+  { href: "/#about", label: "About" },
+  { href: "/blog", label: "Blog" },
+  { href: "/#quiz", label: "Leadership Quiz" },
+  { href: "/#rewire-programs", label: "Upcoming Rewire Programs" },
 ];
 
 const Header = () => {
+  const [hidden, setHidden] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setHidden(true);
+        setIsMenuOpen(false); // Close menu on scroll
+      } else {
+        setHidden(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (hidden) {
+      controls.start("hidden");
+    } else {
+      controls.start("visible");
+    }
+  }, [hidden, controls]);
+
   return (
-    <header className="bg-brand-blue text-brand-off-white">
-      <nav className="container mx-auto flex flex-wrap items-center justify-between p-4">
-        <div className="text-2xl font-bold font-sans">
-          <Link href="/">Just a thought</Link>
+    <motion.header
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: "-100%" },
+      }}
+      initial="visible"
+      animate={controls}
+      transition={{ duration: 0.3 }}
+      className="bg-brand-dark shadow-md sticky top-0 z-50"
+    >
+      <div className="flex items-center justify-between py-1 px-4 sm:px-6 lg:px-8 h-24">
+        <div className="h-full relative w-48 md:w-80">
+          <Link href="/">
+            <Image
+              src="/logo-latest.png"
+              alt="Just a Thought Logo"
+              fill
+              className="object-contain"
+            />
+          </Link>
         </div>
-        <ul className="flex flex-wrap items-center space-x-4">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href} className="hover:underline">
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </header>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-8 text-lg">
+          <ul className="flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-brand-off-white hover:text-brand-gold transition-colors duration-300"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/#book-now"
+            className="bg-brand-gold text-white px-4 py-2 rounded-md hover:bg-opacity-80 transition-colors duration-300 transform hover:scale-105"
+          >
+            Book Now
+          </Link>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="text-brand-off-white focus:outline-none"
+          >
+            <svg
+              className="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {isMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: "100%" }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: "100%" }}
+          transition={{ duration: 0.3 }}
+          className="md:hidden absolute top-0 right-0 h-screen w-3/4 bg-brand-dark shadow-lg p-8"
+        >
+          <nav>
+            <ul className="flex flex-col space-y-8 text-lg">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-brand-off-white hover:text-brand-gold transition-colors duration-300"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/#book-now"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="bg-brand-gold text-white px-4 py-2 rounded-md hover:bg-opacity-80 transition-colors duration-300 inline-block text-center"
+                >
+                  Book Now
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </motion.div>
+      )}
+      {isMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black opacity-50 z-[-1]"
+          onClick={() => setIsMenuOpen(false)}
+        ></div>
+      )}
+    </motion.header>
   );
 };
 

@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 16px;
+  }
+
+  @media (min-width: 1920px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  body {
+    @apply bg-brand-off-white text-brand-brown font-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-sans font-bold text-brand-blue;
+  }
+}
+
+@layer components {
+  .bg-gradient-white {
+    background-image: linear-gradient(to bottom, #ffffff, #f9fafb);
+  }
+  .bg-gradient-gray-100 {
+    background-image: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+  }
+  .bg-gradient-off-white {
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-brand-off-white),
+      #f0f0f0
+    );
+  }
+}

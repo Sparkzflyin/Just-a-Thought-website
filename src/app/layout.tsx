@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Be_Vietnam_Pro, Dancing_Script } from "next/font/google";
+import { Be_Vietnam_Pro, Lora } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
@@ -10,14 +10,49 @@ const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-be-vietnam-pro",
 });
 
-const dancingScript = Dancing_Script({
+const lora = Lora({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-dancing-script",
+  variable: "--font-lora",
 });
 
+const siteUrl = "https://www.your-domain.com"; // Replace with your actual domain
+
 export const metadata: Metadata = {
-  title: "Just a thought",
-  description: "Your strategic partner in cultivating Executive Agility through profound transformation.",
+  title: "Just a Thought - Business and Lifestyle Coaching",
+  description:
+    "We provide lifestyle and business coaching for those looking to improve the quality of their business or lives.",
+  keywords: [
+    "lifestyle coaching",
+    "business coaching",
+    "executive agility",
+    "transformation",
+    "leadership",
+  ],
+  openGraph: {
+    title: "Just a Thought",
+    description:
+      "We provide lifestyle and business coaching for those looking to improve the quality of their business or lives.",
+    url: siteUrl,
+    siteName: "Just a Thought",
+    images: [
+      {
+        url: `${siteUrl}/logo-latest.png`,
+        width: 800,
+        height: 600,
+        alt: "Just a Thought logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Just a Thought",
+    description:
+      "We provide lifestyle and business coaching for those looking to improve the quality of their business or lives.",
+    images: [`${siteUrl}/logo-latest.png`],
+  },
 };
 
 export default function RootLayout({
@@ -25,8 +60,32 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Just a Thought",
+    url: siteUrl,
+    logo: `${siteUrl}/logo-latest.png`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "302-382-6437",
+      contactType: "Customer Service",
+    },
+  };
   return (
-    <html lang="en" className={`${beVietnamPro.variable} ${dancingScript.variable}`}>
+    <html
+      lang="en"
+      className={`${beVietnamPro.variable} ${lora.variable} scroll-smooth`}
+    >
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/logo-latest.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">{children}</main>

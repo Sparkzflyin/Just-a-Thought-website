@@ -6,16 +6,28 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: "1rem",
+        sm: "2rem",
+        lg: "4rem",
+        xl: "5rem",
+        "2xl": "6rem",
+      },
+    },
     extend: {
       colors: {
-        'brand-blue': '#003c64',
-        'brand-off-white': '#e5e2da',
-        'brand-grey-blue': '#6784a4',
-        'brand-brown': '#564034',
+        "brand-dark": "#000000",
+        "brand-blue": "#004c64",
+        "brand-grey-blue": "#6784a4",
+        "brand-gold": "#a17b26",
+        "brand-brown": "#564034",
+        "brand-off-white": "#e5e2da",
       },
       fontFamily: {
-        sans: ['var(--font-be-vietnam-pro)', 'sans-serif'],
-        serif: ['var(--font-dancing-script)', 'cursive'],
+        sans: ["var(--font-be-vietnam-pro)", "sans-serif"],
+        serif: ["var(--font-lora)", "serif"],
       },
     },
   },
