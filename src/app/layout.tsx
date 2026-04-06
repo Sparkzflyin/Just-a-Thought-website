@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Lora } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollProgress from "@/components/ui/ScrollProgress";
+import ScrollToTop from "@/components/ui/ScrollToTop";
+import ExitIntentModal from "@/components/ui/ExitIntentModal";
+import { ScrollProvider } from "@/context/ScrollContext";
 import "./globals.css";
 
 const beVietnamPro = Be_Vietnam_Pro({
@@ -87,9 +91,14 @@ export default function RootLayout({
         />
       </head>
       <body className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <ScrollProvider>
+          <ScrollProgress />
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <ScrollToTop />
+          <ExitIntentModal />
+        </ScrollProvider>
       </body>
     </html>
   );

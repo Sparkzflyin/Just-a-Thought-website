@@ -3,7 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, useAnimation } from "framer-motion";
+import { useScroll } from "@/context/ScrollContext";
 
 const navLinks = [
   { href: "/#home", label: "Home" },
@@ -11,6 +13,7 @@ const navLinks = [
   { href: "/#individuals", label: "Individuals" },
   { href: "/#about", label: "About" },
   { href: "/blog", label: "Blog" },
+  { href: "/values", label: "Clarify Your Values" },
   { href: "/#quiz", label: "Leadership Quiz" },
   { href: "/#rewire-programs", label: "Upcoming Rewire Programs" },
 ];
@@ -19,6 +22,34 @@ const Header = () => {
   const [hidden, setHidden] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const controls = useAnimation();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { setTargetId } = useScroll();
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    if (href.startsWith("/#")) {
+      e.preventDefault();
+      const targetId = href.substring(2);
+      if (pathname === "/") {
+        // Already on the homepage, just scroll
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Not on the homepage, set target and navigate
+        setTargetId(targetId);
+        router.push("/");
+      }
+      setIsMenuOpen(false);
+    } else {
+      // It's a regular link, just navigate
+      setIsMenuOpen(false);
+    }
+  };
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
@@ -59,12 +90,14 @@ const Header = () => {
     >
       <div className="flex items-center justify-between py-1 px-4 sm:px-6 lg:px-8 h-24">
         <div className="h-full relative w-48 md:w-80">
-          <Link href="/">
+          <Link href="/" className="block h-full w-full relative">
             <Image
               src="/logo-latest.png"
               alt="Just a Thought Logo"
               fill
               className="object-contain"
+              loading="eager"
+              sizes="(max-width: 768px) 192px, 320px"
             />
           </Link>
         </div>
@@ -76,6 +109,7 @@ const Header = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className="text-brand-off-white hover:text-brand-gold transition-colors duration-300"
                 >
                   {link.label}
@@ -85,6 +119,7 @@ const Header = () => {
           </ul>
           <Link
             href="/#book-now"
+            onClick={(e) => handleNavClick(e, "/#book-now")}
             className="bg-brand-gold text-white px-4 py-2 rounded-md hover:bg-opacity-80 transition-colors duration-300 transform hover:scale-105"
           >
             Book Now
@@ -139,7 +174,7 @@ const Header = () => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={(e) => handleNavClick(e, link.href)}
                     className="text-brand-off-white hover:text-brand-gold transition-colors duration-300"
                   >
                     {link.label}
@@ -149,7 +184,7 @@ const Header = () => {
               <li>
                 <Link
                   href="/#book-now"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, "/#book-now")}
                   className="bg-brand-gold text-white px-4 py-2 rounded-md hover:bg-opacity-80 transition-colors duration-300 inline-block text-center"
                 >
                   Book Now

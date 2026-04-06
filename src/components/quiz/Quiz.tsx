@@ -82,16 +82,20 @@ const Quiz = () => {
   const [showResults, setShowResults] = useState(false);
 
   const handleAnswer = (style: string) => {
-    setAnswers([...answers, style]);
+    const newAnswers = [...answers, style];
+    setAnswers(newAnswers);
+
     if (currentQuestion < quizQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      const resultStyle = getResult(newAnswers);
+      localStorage.setItem("leadershipStyle", resultStyle);
       setShowResults(true);
     }
   };
 
-  const getResult = () => {
-    const counts = answers.reduce(
+  const getResult = (finalAnswers: string[]) => {
+    const counts = finalAnswers.reduce(
       (acc, answer) => {
         acc[answer] = (acc[answer] || 0) + 1;
         return acc;
@@ -110,7 +114,7 @@ const Quiz = () => {
   };
 
   const result = showResults
-    ? results[getResult() as keyof typeof results]
+    ? results[getResult(answers) as keyof typeof results]
     : null;
 
   return (

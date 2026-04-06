@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const ContactForm = () => {
   const [status, setStatus] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -11,7 +12,9 @@ const ContactForm = () => {
     // In a real application, you would handle form submission here.
     // For this example, we'll just simulate a successful submission.
     setTimeout(() => {
-      setStatus("Your message has been sent successfully!");
+      setStatus(
+        `Thank you, ${name}. It's a pleasure to hear from you. We'll be in touch shortly.`,
+      );
       (e.target as HTMLFormElement).reset();
     }, 2000);
   };
@@ -32,6 +35,7 @@ const ContactForm = () => {
             name="name"
             required
             className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-accent focus:border-accent"
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div>

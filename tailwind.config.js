@@ -29,7 +29,33 @@ module.exports = {
         sans: ["var(--font-be-vietnam-pro)", "sans-serif"],
         serif: ["var(--font-lora)", "serif"],
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme("colors.brand-brown"),
+            h1: {
+              color: theme("colors.brand-gold"),
+            },
+            h2: {
+              color: theme("colors.brand-gold"),
+            },
+            h3: {
+              color: theme("colors.brand-gold"),
+            },
+            a: {
+              color: theme("colors.brand-blue"),
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            },
+            blockquote: {
+              backgroundColor: theme("colors.brand-off-white"),
+              borderLeftColor: theme("colors.brand-gold"),
+            },
+          },
+        },
+      }),
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };

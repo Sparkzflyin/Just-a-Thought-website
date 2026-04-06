@@ -1,31 +1,45 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { posts } from "./posts";
 import FadeIn from "@/components/framermotion/FadeIn";
 
-export const metadata: Metadata = {
-  title: "Just a thought - Blog",
-  description:
-    "Insights on leadership, growth, and the power of a subtractive mindset.",
-};
-
 const BlogPage = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const categories = ["Leadership", "Growth", "Mindset", "Productivity"];
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesCategory = selectedCategory
+      ? post.category === selectedCategory
+      : true;
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <>
       {/* Page Header */}
-      <FadeIn>
-        <section className="bg-gray-100 py-16 md:py-24">
-          <div className="container mx-auto text-center px-4">
+      <div
+        className="py-16 md:py-24 text-center text-white bg-cover bg-center"
+        style={{ backgroundImage: "url(/stock-photos/autumn1.jpg)" }}
+      >
+        <div className="bg-black bg-opacity-50 py-10">
+          <FadeIn>
             <h1 className="text-4xl md:text-5xl font-bold font-serif mb-4">
               J.A.T. Blog
             </h1>
-            <p className="text-lg md:text-xl max-w-3xl mx-auto text-text-primary">
+            <p className="text-lg md:text-xl max-w-3xl mx-auto">
               Insights on leadership, growth, and the power of a subtractive
               mindset.
             </p>
-          </div>
-        </section>
-      </FadeIn>
+          </FadeIn>
+        </div>
+      </div>
 
       {/* Main Content */}
       <FadeIn>
@@ -35,28 +49,33 @@ const BlogPage = () => {
               {/* Blog Posts */}
               <div className="lg:w-2/3">
                 <div className="space-y-16">
-                  {posts.map((post) => (
-                    <article key={post.slug} className="border-b pb-8">
-                      <h2 className="text-3xl font-bold mb-2">
+                  {filteredPosts.length > 0 ? (
+                    filteredPosts.map((post) => (
+                      <article key={post.slug} className="border-b pb-8">
+                        <h2 className="text-3xl font-bold mb-2">
+                          <Link
+                            href={`/blog/${post.slug}`}
+                            className="hover:text-accent transition-colors"
+                          >
+                            {post.title}
+                          </Link>
+                        </h2>
+                        <p className="text-sm text-gray-500 mb-4">
+                          Published on {post.date} by {post.author} ·{" "}
+                          <span>{post.readingTime} min read</span>
+                        </p>
+                        <p className="text-lg mb-4">{post.excerpt}</p>
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="hover:text-accent transition-colors"
+                          className="font-bold text-accent hover:underline"
                         >
-                          {post.title}
+                          Read More &rarr;
                         </Link>
-                      </h2>
-                      <p className="text-sm text-gray-500 mb-4">
-                        Published on {post.date} by {post.author}
-                      </p>
-                      <p className="text-lg mb-4">{post.excerpt}</p>
-                      <Link
-                        href={`/blog/${post.slug}`}
-                        className="font-bold text-accent hover:underline"
-                      >
-                        Read More &rarr;
-                      </Link>
-                    </article>
-                  ))}
+                      </article>
+                    ))
+                  ) : (
+                    <p>No articles found matching your criteria.</p>
+                  )}
                 </div>
               </div>
 
@@ -69,6 +88,8 @@ const BlogPage = () => {
                       type="text"
                       placeholder="Search articles..."
                       className="w-full p-2 border rounded-md"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
 
@@ -76,25 +97,29 @@ const BlogPage = () => {
                     <h3 className="text-2xl font-bold mb-4">Categories</h3>
                     <ul className="space-y-2">
                       <li>
-                        <Link href="#" className="hover:text-accent">
-                          Leadership
-                        </Link>
+                        <button
+                          onClick={() => setSelectedCategory(null)}
+                          className={`w-full text-left hover:text-accent ${
+                            !selectedCategory ? "font-bold text-accent" : ""
+                          }`}
+                        >
+                          All Categories
+                        </button>
                       </li>
-                      <li>
-                        <Link href="#" className="hover:text-accent">
-                          Growth
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#" className="hover:text-accent">
-                          Mindset
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#" className="hover:text-accent">
-                          Productivity
-                        </Link>
-                      </li>
+                      {categories.map((category) => (
+                        <li key={category}>
+                          <button
+                            onClick={() => setSelectedCategory(category)}
+                            className={`w-full text-left hover:text-accent ${
+                              selectedCategory === category
+                                ? "font-bold text-accent"
+                                : ""
+                            }`}
+                          >
+                            {category}
+                          </button>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>

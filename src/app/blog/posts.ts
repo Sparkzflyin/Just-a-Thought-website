@@ -1,9 +1,17 @@
-export const posts = [
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200;
+  const text = content.replace(/<[^>]*>/g, ""); // Strip HTML tags
+  const wordCount = text.split(/\s+/).length;
+  return Math.ceil(wordCount / wordsPerMinute);
+}
+
+const postsContent = [
   {
     slug: "the-power-of-support",
     title: "THE POWER OF SUPPORT: INCREASING YOUR CONVERSION RATE",
     author: "Autumn Tuxward",
     date: "2026-12-28",
+    category: "Leadership",
     excerpt:
       "How often do we say that we support people and their dreams? How often have we been told that? Countless. Now, let’s compare that to the amount of time that proclaimed support has actually manifested into tangible support...",
     content: `
@@ -21,6 +29,7 @@ export const posts = [
     title: "FAITH IS THE FOUNDATION, BUT ACTION IS THE ARCHITECTURE",
     author: "Autumn Tuxward",
     date: "2026-12-21",
+    category: "Mindset",
     excerpt:
       "I am a Type A personality... always have been. I like to do things a certain way and I’m big on the pursuit of excellence. “We are not doing anything halfway over here.”",
     content: `
@@ -30,3 +39,8 @@ export const posts = [
     `,
   },
 ];
+
+export const posts = postsContent.map((post) => ({
+  ...post,
+  readingTime: calculateReadingTime(post.content),
+}));
