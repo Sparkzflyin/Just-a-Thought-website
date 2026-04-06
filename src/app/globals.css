@@ -73,4 +73,7 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+  .glow {
+    text-shadow: 0 0 8px #a17b26;
+  }
 }
