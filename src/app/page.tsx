@@ -17,6 +17,7 @@ import WordReveal from "@/components/framermotion/WordReveal";
 import MagneticButton from "@/components/ui/MagneticButton";
 import StatCounter from "@/components/ui/StatCounter";
 import Marquee from "@/components/ui/Marquee";
+import DualMarquee from "@/components/ui/DualMarquee";
 import { scrollToSection } from "@/utils/scroll";
 
 const CheckIcon = () => (
@@ -246,6 +247,24 @@ export default function Home() {
           </div>
         </section>
       </FadeIn>
+
+      <DualMarquee
+        className="bg-brand-blue py-2"
+        topItems={[
+          "Lead with Purpose",
+          "Subtract the Noise",
+          "Clarity over Complexity",
+          "Coach. Rewire. Grow.",
+        ]}
+        bottomItems={[
+          "Executive Coaching",
+          "Leadership Development",
+          "Cultural Strategy",
+          "Just a Thought",
+        ]}
+        topClassName="text-brand-off-white"
+        bottomClassName="text-brand-gold"
+      />
 
       <StickyScrollSection
         className="bg-white"
