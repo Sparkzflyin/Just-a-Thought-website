@@ -76,10 +76,20 @@ const results = {
   },
 };
 
+const takeawayQuestions: Record<string, string> = {
+  Visionary:
+    "If vision is your strength, what's one tomorrow you can't stop picturing — and what's the one thing today that brings it closer?",
+  Coach:
+    "Who on your team is one good question away from a breakthrough — and what's that question?",
+  Servant:
+    "What's one support your team is too proud to ask for — and how can you offer it first?",
+};
+
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleAnswer = (style: string) => {
     const newAnswers = [...answers, style];
@@ -89,7 +99,11 @@ const Quiz = () => {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       const resultStyle = getResult(newAnswers);
-      localStorage.setItem("leadershipStyle", resultStyle);
+      try {
+        localStorage.setItem("leadershipStyle", resultStyle);
+      } catch {
+        // localStorage unavailable (private browsing or SSR)
+      }
       setShowResults(true);
     }
   };
@@ -111,11 +125,27 @@ const Quiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
     setShowResults(false);
+    setCopied(false);
   };
 
-  const result = showResults
-    ? results[getResult(answers) as keyof typeof results]
+  const resultStyle = showResults ? getResult(answers) : null;
+  const result = resultStyle
+    ? results[resultStyle as keyof typeof results]
     : null;
+  const takeaway = resultStyle ? takeawayQuestions[resultStyle] : null;
+
+  const handleSave = async () => {
+    if (!result || !takeaway) return;
+    try {
+      await navigator.clipboard.writeText(
+        `${result.title} — One question to sit with:\n\n"${takeaway}"\n\n— Autumn · Just a Thought`,
+      );
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2400);
+    } catch {
+      // Clipboard API unavailable — user can still screenshot the card
+    }
+  };
 
   return (
     <div className="text-center">
@@ -153,12 +183,40 @@ const Quiz = () => {
             >
               <h2 className="text-3xl font-bold mb-4">{result.title}</h2>
               <p className="text-lg mb-8">{result.description}</p>
-              <button
-                onClick={restartQuiz}
-                className="bg-brand-gold text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-opacity-80 transition-colors"
-              >
-                Take Again
-              </button>
+
+              {takeaway && (
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.25 }}
+                  className="mt-4 mb-8 bg-brand-dark text-brand-off-white p-8 md:p-10 rounded-2xl shadow-xl max-w-xl mx-auto text-left"
+                >
+                  <p className="text-xs uppercase tracking-[0.3em] text-brand-gold mb-5">
+                    One question to sit with this week
+                  </p>
+                  <p className="text-lg md:text-xl font-serif italic leading-relaxed mb-6">
+                    &ldquo;{takeaway}&rdquo;
+                  </p>
+                  <p className="text-xs text-right text-gray-400 italic">
+                    — Autumn · Just a Thought
+                  </p>
+                </motion.div>
+              )}
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  onClick={handleSave}
+                  className="bg-brand-gold text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-opacity-80 transition-colors"
+                >
+                  {copied ? "Copied to clipboard" : "Save this thought"}
+                </button>
+                <button
+                  onClick={restartQuiz}
+                  className="border-2 border-brand-gold text-brand-gold font-bold py-3 px-8 rounded-full text-lg hover:bg-brand-gold hover:text-white transition-colors"
+                >
+                  Take Again
+                </button>
+              </div>
             </motion.div>
           )
         )}

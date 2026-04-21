@@ -1,37 +1,33 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const FocusWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isFocusMode, setIsFocusMode] = useState(false);
 
+  useEffect(() => {
+    if (isFocusMode) {
+      document.body.classList.add("focus-mode");
+    } else {
+      document.body.classList.remove("focus-mode");
+    }
+    return () => {
+      document.body.classList.remove("focus-mode");
+    };
+  }, [isFocusMode]);
+
   return (
     <>
-      <div className="fixed top-24 right-4 z-50">
-        <button
-          onClick={() => setIsFocusMode(!isFocusMode)}
-          className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
-          aria-label="Toggle Focus Mode"
-        >
-          {isFocusMode ? "👁️" : "✨"}
-        </button>
-      </div>
+      <button
+        onClick={() => setIsFocusMode(!isFocusMode)}
+        className="fixed top-28 right-4 z-50 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors shadow-md"
+        aria-label={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
+        title={isFocusMode ? "Exit focus mode" : "Enter focus mode"}
+      >
+        {isFocusMode ? "👁️" : "✨"}
+      </button>
 
-      <AnimatePresence>
-        {!isFocusMode && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="hidden md:block" // Hide on mobile for a better experience
-          >
-            {/* Header and Footer will be here */}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="transition-all duration-300">{children}</div>
+      <div>{children}</div>
     </>
   );
 };

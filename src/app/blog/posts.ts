@@ -1,5 +1,6 @@
 function calculateReadingTime(content: string): number {
   const wordsPerMinute = 200;
+  // eslint-disable-next-line sonarjs/slow-regex -- negated class is linear, no catastrophic backtracking
   const text = content.replace(/<[^>]*>/g, ""); // Strip HTML tags
   const wordCount = text.split(/\s+/).length;
   return Math.ceil(wordCount / wordsPerMinute);

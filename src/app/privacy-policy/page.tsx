@@ -2,8 +2,16 @@ import type { Metadata } from "next";
 import FadeIn from "@/components/framermotion/FadeIn";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - Just a thought",
-  description: "Effective Date: January 1, 2026",
+  title: "Privacy Policy",
+  description:
+    "Just a Thought's privacy policy — how we collect, use, and protect your personal information.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const PrivacyPolicyPage = () => {
@@ -30,18 +38,19 @@ const PrivacyPolicyPage = () => {
             <div className="prose prose-lg max-w-none">
               <h2>1. Introduction and Scope</h2>
               <p>
-                Just A Thought, LLC ("we," "us," or "our") is the "Business" or
-                "Controller" responsible for your data. This policy describes
-                our practices for The Core Optimization Plan and The Rewire Lab.
-                We utilize a "subtractive methodology" to remove organizational
-                drag and friction. This policy serves as a legally binding
-                contract regarding your data.
+                Just A Thought, LLC (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
+                &ldquo;our&rdquo;) is the &ldquo;Business&rdquo; or
+                &ldquo;Controller&rdquo; responsible for your data. This policy
+                describes our practices for The Core Optimization Plan and The
+                Rewire Lab. We utilize a &ldquo;subtractive methodology&rdquo;
+                to remove organizational drag and friction. This policy serves
+                as a legally binding contract regarding your data.
               </p>
 
               <h2>2. Information We Collect</h2>
               <p>
-                We collect "Personal Information" that identifies or relates to
-                you.
+                We collect &ldquo;Personal Information&rdquo; that identifies or
+                relates to you.
               </p>
 
               <h2>3. How We Use Your Information</h2>
@@ -52,8 +61,8 @@ const PrivacyPolicyPage = () => {
               <ul>
                 <li>
                   <strong>Consulting Services:</strong> To conduct audits,
-                  identify "Zombie Work," and deliver the "Undo. Unthink.
-                  Unlearn." framework.
+                  identify &ldquo;Zombie Work,&rdquo; and deliver the
+                  &ldquo;Undo. Unthink. Unlearn.&rdquo; framework.
                 </li>
                 <li>
                   <strong>Cohort Management:</strong> To deliver Accelerator
@@ -66,7 +75,8 @@ const PrivacyPolicyPage = () => {
                 </li>
                 <li>
                   <strong>Sales Engagement:</strong> To reach out regarding
-                  future services and maintain the "Alumni to Enterprise" loop.
+                  future services and maintain the &ldquo;Alumni to
+                  Enterprise&rdquo; loop.
                 </li>
                 <li>
                   <strong>Security:</strong> To detect and prevent fraudulent or
@@ -83,7 +93,8 @@ const PrivacyPolicyPage = () => {
                 </li>
                 <li>
                   <strong>Advertising Partners:</strong> To provide targeted ads
-                  for "Visionary CEOs" and "Frustrated High-Performers"
+                  for &ldquo;Visionary CEOs&rdquo; and &ldquo;Frustrated
+                  High-Performers&rdquo;
                 </li>
                 <li>
                   <strong>Legal Successors:</strong> Entities involved in a
@@ -111,8 +122,9 @@ const PrivacyPolicyPage = () => {
                   obligations.
                 </li>
                 <li>
-                  <strong>Right to Opt-Out:</strong> Opt-out of the "sale" or
-                  "sharing" of data for targeted advertising.
+                  <strong>Right to Opt-Out:</strong> Opt-out of the
+                  &ldquo;sale&rdquo; or &ldquo;sharing&rdquo; of data for
+                  targeted advertising.
                 </li>
               </ul>
               <p>
@@ -121,7 +133,7 @@ const PrivacyPolicyPage = () => {
                 request, you may appeal by emailing us.
               </p>
 
-              <h2>6. "Do Not Track" and Global Privacy Control</h2>
+              <h2>6. &ldquo;Do Not Track&rdquo; and Global Privacy Control</h2>
               <p>
                 <strong>Do Not Track (DNT):</strong> We currently do not take
                 action in response to proprietary DNT browser signals due to
@@ -133,7 +145,7 @@ const PrivacyPolicyPage = () => {
                 and sharing of your personal information.
               </p>
 
-              <h2>7. Children's Privacy</h2>
+              <h2>7. Children&apos;s Privacy</h2>
               <p>
                 Our services are for adults; we do not knowingly collect data
                 from children under 13. Per DOPPA, we do not market prohibited

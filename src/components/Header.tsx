@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, useAnimation } from "framer-motion";
 import { useScroll } from "@/context/ScrollContext";
+import { scrollToId } from "@/utils/scroll";
 
 const navLinks = [
   { href: "/#home", label: "Home" },
@@ -30,24 +31,15 @@ const Header = () => {
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string,
   ) => {
-    if (href.startsWith("/#")) {
-      e.preventDefault();
-      const targetId = href.substring(2);
-      if (pathname === "/") {
-        // Already on the homepage, just scroll
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      } else {
-        // Not on the homepage, set target and navigate
-        setTargetId(targetId);
-        router.push("/");
-      }
-      setIsMenuOpen(false);
+    setIsMenuOpen(false);
+    if (!href.startsWith("/#")) return;
+    e.preventDefault();
+    const targetId = href.substring(2);
+    if (pathname === "/") {
+      scrollToId(targetId);
     } else {
-      // It's a regular link, just navigate
-      setIsMenuOpen(false);
+      setTargetId(targetId);
+      router.push("/");
     }
   };
 
@@ -89,15 +81,15 @@ const Header = () => {
       className="bg-brand-dark shadow-md sticky top-0 z-50"
     >
       <div className="flex items-center justify-between py-1 px-4 sm:px-6 lg:px-8 h-24">
-        <div className="h-full relative w-48 md:w-80">
-          <Link href="/" className="block h-full w-full relative">
+        <div className="flex items-center h-full w-36 md:w-56">
+          <Link href="/" className="block w-full">
             <Image
-              src="/logo-latest.png"
+              src="/logo.svg"
               alt="Just a Thought Logo"
-              fill
-              className="object-contain"
+              width={210}
+              height={69}
+              className="object-contain w-full"
               loading="eager"
-              sizes="(max-width: 768px) 192px, 320px"
             />
           </Link>
         </div>
@@ -110,7 +102,7 @@ const Header = () => {
                 <Link
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-brand-off-white hover:text-brand-gold transition-colors duration-300"
+                  className="nav-underline text-brand-off-white hover:text-brand-gold transition-colors duration-300"
                 >
                   {link.label}
                 </Link>
@@ -166,7 +158,7 @@ const Header = () => {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: "100%" }}
           transition={{ duration: 0.3 }}
-          className="md:hidden absolute top-0 right-0 h-screen w-3/4 bg-brand-dark shadow-lg p-8"
+          className="md:hidden absolute top-0 right-0 h-dvh w-3/4 bg-brand-dark shadow-lg p-8"
         >
           <nav>
             <ul className="flex flex-col space-y-8 text-lg">
@@ -195,10 +187,12 @@ const Header = () => {
         </motion.div>
       )}
       {isMenuOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black opacity-50 z-[-1]"
+        <button
+          type="button"
+          className="md:hidden fixed inset-0 bg-black opacity-50 z-[-1] cursor-default"
+          aria-label="Close menu"
           onClick={() => setIsMenuOpen(false)}
-        ></div>
+        />
       )}
     </motion.header>
   );

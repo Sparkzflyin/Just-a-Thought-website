@@ -5,7 +5,7 @@ export default function MerchPage() {
         Merchandise Coming Soon!
       </h1>
       <p className="mt-3 text-lg text-center text-gray-600">
-        We're working on some exciting new products. Stay tuned!
+        We&apos;re working on some exciting new products. Stay tuned!
       </p>
     </main>
   );
