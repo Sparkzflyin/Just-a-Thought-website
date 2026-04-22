@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+build
+dist
+coverage
+.git
+public
+jat-assets
+package-lock.json
+tsconfig.tsbuildinfo
+next-env.d.ts
